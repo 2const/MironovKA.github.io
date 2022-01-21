@@ -1,0 +1,113 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<meta charset="UTF-8">
+<style type="text/css">
+.tt {color: green; font-weight: bold;}
+.ff {color: red; font-weight: bold;}
+body{background-color: azure;}
+</style>
+</head>
+<body><div align="left">
+<script>
+var questions = [ // Сначала вопрос, потом варианты через запятую, потом правильный ответ
+["1. Какую кодировку следует использовать на сайте?",
+"WINSOWS-1251",
+"UTF-8",
+"UTF-32",
+"UTF-16",
+2],
+["2. Как правильно оформить нумерованный список?",
+"Поместить внутрь тега &ltol&gt теги &ltli&gt, внутри которых написать текст",
+"Разделить каждую строку с помощью тега &ltbr&gt, на каждой новой строке перед текстом добавить число, точку и пробел",
+"Просто написать текст в формате: число, точка, пробел, текст, перенос строки. Браузер автоматически распознает данную структуру",
+1],
+["3. Каким является следующий адрес ссылки: ./pages/page2.html?",
+"Абсолютным",
+"Относительным",
+2],
+["4. Как выделить текст курсивом?",
+"&ltem&gtкурсив&lt/em&gt",
+"&ltp&gtкурсив&lt/p&gt",
+"&ltc&gtкурсив&lt/c&gt",
+"&lthr&gtкурсив&lt/hr&gt",
+1],
+["5. Каких тегов в HTML не существует?",
+"Парных", "Тройных", "Одиночных",
+2],
+["6. Как сделать текст жирным?",
+"&ltbr&gtжирный&lt/br&gt",
+ "&ltp&gtжирный&lt/p&gt",
+ "&ltstrong&gtжирный&lt/strong&gt",
+ "&lta&gtжирный&lt/a&gt",
+ 3]
+
+
+], qQuantity = questions.length, tAnswers = 0, wAnswers = 0;
+ 
+function goNext(N) { // N = номер вопроса
+document.getElementById('qBlock').innerHTML = ""; // Очищаем блок вопросов
+var qElem = questions[N].length-2, i=1; // Кол-во в массиве минус вопрос и счетчик
+var e = document.getElementById('qBlock');
+var addQ = document.createElement('h3'); // заголовок, id из номера вопроса
+addQ.id = 'head' + N;
+e.appendChild(addQ);
+document.getElementById('head' + N).innerHTML = questions[N][i-1]; // вписываем вопрос
+while (qElem >= i) {
+var addP = document.createElement('p'); // абзацы
+addP.id = 'p' + i;
+e.appendChild(addP);
+    var addInput = document.createElement('input'); // инпуты
+   addInput.type = 'radio';
+    addInput.name = 'a';
+    addInput.value = i;
+   document.getElementById('p' + i).appendChild(addInput);
+    document.getElementById('p' + i).insertAdjacentHTML("BeforeEnd", ' '+questions[N][i]); // вопросы
+    i++;
+    }
+    document.getElementById('btn').innerHTML = "<input type='button' value='Проверить' onclick='submit("+N+")' />";
+}
+ 
+function submit(N) { // Проверяем ответы
+var varQuantity = (document.getElementsByName('a').length), oneVar = 0;
+while (oneVar <= varQuantity) {
+if (document.getElementsByName('a')[oneVar].checked == false) {
+oneVar++;
+}
+else {
+var all = questions[N].length-1;
+var t = questions[N][all]; // правильный ответ
+if (document.getElementsByName('a')[oneVar].value == t) {
+document.getElementById('p' + t).className = 'tt';
+tAnswers++;
+} else {
+var ff = oneVar+1;
+document.getElementById('p' + t).className = 'tt';
+document.getElementById('p' + ff).className = 'ff';
+wAnswers++;
+}
+break;
+}
+}
+N++;
+if (N == qQuantity) {
+document.getElementById('btn').innerHTML = "<input type='button' id='next' value='Перейти к результатам' onclick='toResults()' />";
+} else {
+document.getElementById('btn').innerHTML = "<input type='button' id='next' value='Следующий вопрос' onclick='goNext("+N+")' />";
+}
+}
+ 
+function toResults() {
+document.getElementById('qBlock').innerHTML = "<h3>Тест пройден!</h3>";
+document.getElementById('btn').innerHTML = "<h4>Результаты:</h4>Правильных ответов: "+tAnswers+"<br>Неправильных ответов: "+wAnswers+"<p>Желаете пройти тест еще раз?</p><input type='button' value='Приступим!' onclick='goNext(0)' />";
+tAnswers = 0, wAnswers = 0;
+}
+</script>
+<div> 
+<div id="qBlock"><h2>Тест</h2>
+</div>
+<div id='btn'>
+<input type="button" value="Приступим!" onclick="goNext(0)" />
+</div>
+</body>
+</html>
